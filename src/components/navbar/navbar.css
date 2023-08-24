@@ -16,6 +16,11 @@
 
 .logo {
 	font-weight: 500;
+	color: white;
+	font-weight: bold;
+}
+.logoLink {
+	text-decoration: none;
 }
 
 .navButton {
