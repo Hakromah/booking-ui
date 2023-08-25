@@ -83,15 +83,18 @@
 .headerSearchText {
 	color: lightgray;
 	margin-left: 5px;
+	cursor: pointer;
 }
 /* date range stylings */
 .date {
 	position: absolute;
 	top: 43px;
+	z-index: 2;
 }
 
 .options {
 	position: absolute;
+	z-index: 2;
 	top: 43px;
 	background-color: #fff;
 	color: gray;
