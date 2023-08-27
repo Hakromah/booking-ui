@@ -45,6 +45,7 @@ const Header = ({ type }) => {
 	const handleSearch = () => {
 		navigate('/hotels', { state: { destination, date, options } });
 	};
+
 	return (
 		<div className="header">
 			<div
@@ -67,7 +68,7 @@ const Header = ({ type }) => {
 					</div>
 					<div className="headerListItem">
 						<MdAttractions size={30} />
-						<span>Arrractions</span>
+						<span>Attractions</span>
 					</div>
 					<div className="headerListItem">
 						<BsFillTaxiFrontFill size={20} />
