@@ -1,31 +1,38 @@
+import useFetch from '../../hooks/useFetch';
 import './featuredProperties.css';
 
 const FeaturedProperties = () => {
+	const { data, loading } = useFetch('/hotels?featured=true');
+	console.log(data);
 	return (
 		<div className="fp">
-			<div className="fpItem">
-				<img
-					src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/351570239.jpg?k=4e74e759d36154ca936f838f1ba31bcd9214ff8b100c9d8e759106242f6387d8&o=&hp=1"
-					alt=""
-					className="fpImg"
-				/>
-				<span className="fpName">Martius Private Suites Hotel </span>
-				<span className="fpCity">Italy </span>
-				<span className="fpPrice">Starting from 80$ </span>
-				<div className="fpRating">
-					<button>6.8</button>
-					<span>Excellent</span>
-				</div>
-			</div>
-			<div className="fpItem">
+			{loading ? (
+				'Loading please wait...'
+			) : (
+				<>
+					{data.map((item) => (
+						<div className="fpItem" key={item._id}>
+							<img src={item.photos[0]} alt="" className="fpImg" />
+							<span className="fpName">{item.name}</span>
+							<span className="fpCity">{item.city} </span>
+							<span className="fpPrice">&#36;{item.cheapestPrice} </span>
+							{item.rating && (
+								<div className="fpRating">
+									<button>{item.rating}</button>
+									<span>Excellent</span>
+								</div>
+							)}
+						</div>
+					))}
+				</>
+			)}
+			{/* <div className="fpItem">
 				<img
 					src="https://cf.bstatic.com/xdata/images/hotel/square200/303890276.webp?k=ca49b12c9fc6a04f1cb0f94e3812f08d5e055c5bb6f54d8e79c0616ca8298edb&o="
 					alt=""
 					className="fpImg"
 				/>
-				<span className="fpName">
-					Nikis Collection Navona
-				</span>
+				<span className="fpName">Nikis Collection Navona</span>
 				<span className="fpCity">Italy </span>
 				<span className="fpPrice">Starting from 90$ </span>
 				<div className="fpRating">
@@ -60,7 +67,7 @@ const FeaturedProperties = () => {
 					<button>8.8</button>
 					<span>Excellent</span>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
