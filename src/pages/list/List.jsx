@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { DateRange } from 'react-date-range';
 import SearchItem from '../../components/searchItem/SearchItem';
+import useFetch from '../../hooks/useFetch';
 
 const List = () => {
 	const location = useLocation();
@@ -14,7 +15,17 @@ const List = () => {
 	const [date, setDate] = useState(location.state.date);
 	const [openDate, setOpenDate] = useState(false);
 	const [options] = useState(location.state.options); //setOptions will be used later
+	const [min, setMin] = useState(undefined);
+	const [max, setMax] = useState(undefined);
 
+	const { data, loading, error, refetch } = useFetch(
+		`/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
+	);
+
+	//search buuton click
+	const handleSearch = () => {
+		refetch();
+	};
 	return (
 		<div>
 			<Navbar />
@@ -53,6 +64,7 @@ const List = () => {
 										min={0}
 										type="number"
 										className="lsOptionInput"
+										onChange={(e) => e.target.value}
 									/>
 								</div>
 								<div className="lsOptionItem">
@@ -60,6 +72,7 @@ const List = () => {
 										Max price <small>per night</small>
 									</span>
 									<input
+										onChange={(e) => e.target.value}
 										min={0}
 										type="number"
 										className="lsOptionInput"
@@ -94,18 +107,18 @@ const List = () => {
 								</div>
 							</div>
 						</div>
-						<button>Search</button>
+						<button onClick={handleSearch}>Search</button>
 					</div>
 					<div className="listResult">
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
-						<SearchItem />
+						{loading ? (
+							'loading plese wait...'
+						) : (
+							<>
+								{data?.map((item) => (
+									<SearchItem item={item} key={item._id} />
+								))}
+							</>
+						)}
 					</div>
 				</div>
 			</div>

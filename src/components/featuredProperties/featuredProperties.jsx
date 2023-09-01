@@ -2,8 +2,8 @@ import useFetch from '../../hooks/useFetch';
 import './featuredProperties.css';
 
 const FeaturedProperties = () => {
-	const { data, loading } = useFetch('/hotels?featured=true');
-	
+	const { data, loading } = useFetch('/hotels?featured=true&limit=4');
+
 	return (
 		<div className="fp">
 			{loading ? (
@@ -40,34 +40,7 @@ const FeaturedProperties = () => {
 					<span>Excellent</span>
 				</div>
 			</div>
-			<div className="fpItem">
-				<img
-					src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/137605453.jpg?k=e4905524c0b39a36ed9fe6660a52425a9490e07068e22b963ce6a05a56cd95e9&o=&hp=1"
-					alt=""
-					className="fpImg"
-				/>
-				<span className="fpName">Le Tsuba Hotel</span>
-				<span className="fpCity">Paris </span>
-				<span className="fpPrice">Starting from 80$ </span>
-				<div className="fpRating">
-					<button>6.8</button>
-					<span>Excellent</span>
-				</div>
-			</div>
-			<div className="fpItem">
-				<img
-					src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/177954582.jpg?k=ff6f19fa263f9b3afac23df3338d5858bc21639cbcc510c57223c1ae8a3ecd2d&o=&hp=1"
-					alt=""
-					className="fpImg"
-				/>
-				<span className="fpName">Eden Hotel Amsterdam </span>
-				<span className="fpCity">Amsterdam </span>
-				<span className="fpPrice">Starting from 100$ </span>
-				<div className="fpRating">
-					<button>8.8</button>
-					<span>Excellent</span>
-				</div>
-			</div> */}
+			 */}
 		</div>
 	);
 };
