@@ -12,19 +12,19 @@ const List = () => {
 	const location = useLocation();
 
 	const [destination] = useState(location.state.destination); //setDestination will be used later
-	const [date, setDate] = useState(location.state.date);
+	const [dates, setDates] = useState(location.state.dates);
 	const [openDate, setOpenDate] = useState(false);
 	const [options] = useState(location.state.options); //setOptions will be used later
 	const [min, setMin] = useState(undefined);
 	const [max, setMax] = useState(undefined);
 
-	const { data, loading, error, refetch } = useFetch(
+	const { data, loading, reFetch } = useFetch(
 		`/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
 	);
 
 	//search buuton click
 	const handleSearch = () => {
-		refetch();
+		reFetch();
 	};
 	return (
 		<div>
@@ -38,18 +38,18 @@ const List = () => {
 							<label>Destination</label>
 							<input type="text" placeholder={destination} />
 						</div>
-						{/* date and it table */}
+						{/* dates and it table */}
 						<div className="lsItem">
 							<label>Check-in Date</label>
 							<span onClick={() => setOpenDate(!openDate)}>{`${format(
-								date[0].startDate,
+								dates[0].startDate,
 								'MM/dd/yyyy'
-							)} to ${format(date[0].endDate, 'MM/dd/yyyy')}`}</span>
+							)} to ${format(dates[0].endDate, 'MM/dd/yyyy')}`}</span>
 							{openDate && (
 								<DateRange
-									onChange={(item) => setDate([item.selection])}
+									onChange={(item) => setDates([item.selection])}
 									minDate={new Date()} //this will hilight all the previus dates
-									ranges={date}
+									ranges={dates}
 								/>
 							)}
 						</div>
@@ -61,10 +61,9 @@ const List = () => {
 										Min price <small>per night</small>
 									</span>
 									<input
-										min={0}
 										type="number"
 										className="lsOptionInput"
-										onChange={(e) => e.target.value}
+										onChange={(e) => setMin(e.target.value)}
 									/>
 								</div>
 								<div className="lsOptionItem">
@@ -72,8 +71,7 @@ const List = () => {
 										Max price <small>per night</small>
 									</span>
 									<input
-										onChange={(e) => e.target.value}
-										min={0}
+										onChange={(e) => setMax(e.target.value)}
 										type="number"
 										className="lsOptionInput"
 									/>

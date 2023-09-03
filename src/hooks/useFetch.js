@@ -18,9 +18,9 @@ const useFetch = (url) => {
 			setLoading(false);
 		};
 		fetchData();
-	}, [url]);
+	}, [url]); //this (url) dependance will refetch automatically as soon as you enter the min or max price for searching
 
-	const refetch = async () => {
+	const reFetch = async () => {
 		setLoading(true);
 		try {
 			const res = await axios.get(url);
@@ -31,7 +31,7 @@ const useFetch = (url) => {
 		setLoading(false);
 	};
 
-	return { data, loading, error, refetch };
+	return { data, loading, error, reFetch };
 };
 
 export default useFetch;

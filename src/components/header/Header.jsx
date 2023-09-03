@@ -1,5 +1,5 @@
 import './header.css';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { MdHotel, MdFlightTakeoff, MdAttractions } from 'react-icons/md';
 import { AiFillCar } from 'react-icons/ai';
 import { BsFillTaxiFrontFill, BsFillPersonFill } from 'react-icons/bs';
@@ -10,11 +10,13 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../../context/SearchContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header = ({ type }) => {
 	const [destination, setDestination] = useState('');
 	const [openDate, setOpenDate] = useState(false);
-	const [date, setDate] = useState([
+	const [dates, setDates] = useState([
 		{
 			startDate: new Date(),
 			endDate: new Date(),
@@ -30,6 +32,7 @@ const Header = ({ type }) => {
 		room: 1,
 	});
 	const navigate = useNavigate();
+	const { user } = useContext(AuthContext);
 
 	//options counter function
 	const handleOpion = (name, operations) => {
@@ -41,9 +44,15 @@ const Header = ({ type }) => {
 			};
 		});
 	};
+
 	//search click to navigate to list page
+	const { dispatch } = useContext(SearchContext);
 	const handleSearch = () => {
-		navigate('/hotels', { state: { destination, date, options } });
+		dispatch({
+			type: 'NEW_SEARCH',
+			payload: { destination, dates, options },
+		});
+		navigate('/hotels', { state: { destination, dates, options } });
 	};
 
 	return (
@@ -86,7 +95,11 @@ const Header = ({ type }) => {
 							Get reworded for your travels and get instant saving of 15%
 							or more with a free Hsk.Hotel account
 						</p>
-						<button className="headerButton">Sign in / Register</button>
+						{!user && (
+							<button className="headerButton">
+								Sign in / Register
+							</button>
+						)}
 						{/* HEADER SEARCH AREA */}
 						<div className="headerSearch">
 							<div className="headerSearchItem">
@@ -108,16 +121,16 @@ const Header = ({ type }) => {
 									onClick={() => setOpenDate(!openDate)}
 									className="headerSearchText"
 								>{`${format(
-									date[0].startDate,
+									dates[0].startDate,
 									'MM/dd/yyyy'
-								)} to ${format(date[0].endDate, 'MM/dd/yyyy')}`}</span>
+								)} to ${format(dates[0].endDate, 'MM/dd/yyyy')}`}</span>
 								{/* DATE RANGE FROM REACT DATE-RANGE */}
 								{openDate && (
 									<DateRange
 										editableDateInputs={true}
-										onChange={(item) => setDate([item.selection])}
+										onChange={(item) => setDates([item.selection])}
 										moveRangeOnFirstSelection={false}
-										ranges={date}
+										ranges={dates}
 										className="date"
 										minDate={new Date()}
 									/>
