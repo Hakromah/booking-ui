@@ -11,7 +11,7 @@ import useFetch from '../../hooks/useFetch';
 const List = () => {
 	const location = useLocation();
 
-	const [destination] = useState(location.state.destination); //setDestination will be used later
+	const [destination, setDestination] = useState(location.state.destination); //setDestination will be used later
 	const [dates, setDates] = useState(location.state.dates);
 	const [openDate, setOpenDate] = useState(false);
 	const [options] = useState(location.state.options); //setOptions will be used later
@@ -36,7 +36,11 @@ const List = () => {
 						<h1 className="listTitle">Search</h1>
 						<div className="lsItem">
 							<label>Destination</label>
-							<input type="text" placeholder={destination} />
+							<input
+								type="text"
+								placeholder={destination}
+								onChange={(e) => setDestination(e.target.value)}
+							/>
 						</div>
 						{/* dates and it table */}
 						<div className="lsItem">
@@ -64,6 +68,7 @@ const List = () => {
 										type="number"
 										className="lsOptionInput"
 										onChange={(e) => setMin(e.target.value)}
+										placeholder="min"
 									/>
 								</div>
 								<div className="lsOptionItem">
@@ -74,6 +79,7 @@ const List = () => {
 										onChange={(e) => setMax(e.target.value)}
 										type="number"
 										className="lsOptionInput"
+										placeholder="max"
 									/>
 								</div>
 								<div className="lsOptionItem">
