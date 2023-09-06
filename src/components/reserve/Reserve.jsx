@@ -3,6 +3,8 @@ import useFetch from '../../hooks/useFetch';
 import './reserve.css';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { SearchContext } from '../../context/SearchContext';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Reserve = ({ setOpen, hotelId }) => {
 	const [selectedRooms, setSelectedRooms] = useState([]);
@@ -27,7 +29,7 @@ const Reserve = ({ setOpen, hotelId }) => {
 
 	const isAvailable = (roomNumber) => {
 		const isFound = roomNumber.unavailableDates.some((date) =>
-			alldates.includes(new Date().getTime())
+			alldates.includes(new Date(date).getTime())
 		);
 
 		return !isFound;
@@ -42,15 +44,28 @@ const Reserve = ({ setOpen, hotelId }) => {
 				: selectedRooms.filter((item) => item !== value)
 		);
 	};
-
-	const handleClick = () => {};
+	const navigate = useNavigate();
+	const handleClick = async () => {
+		try {
+			await Promise.all(
+				selectedRooms.map((roomId) => {
+					const res = axios.put(`/rooms/availability/${roomId}`, {
+						dates: alldates,
+					});
+					return res.data;
+				})
+			);
+			setOpen(false);
+			navigate('/');
+		} catch (error) {}
+	};
 
 	return (
 		<div className="reserve">
 			<div className="rContainer">
 				<IoMdCloseCircle
 					size={30}
-					className="close"
+					className="closeRoom"
 					onClick={() => setOpen(false)}
 				/>
 				<span>Select your rooms:</span>
@@ -66,17 +81,19 @@ const Reserve = ({ setOpen, hotelId }) => {
 								Price: <b>{item.price}</b>
 							</div>
 						</div>
-						{item?.roomNumbers.map((roomNumber) => (
-							<div className="room" key={roomNumber._id}>
-								<label>{roomNumber.number}</label>
-								<input
-									type="checkbox"
-									value={roomNumber._id}
-									onChange={handleSelect}
-									disabled={!isAvailable(roomNumber)}
-								/>
-							</div>
-						))}
+						<div className="rSelectRoom">
+							{item?.roomNumbers.map((roomNumber) => (
+								<div className="rRoom" key={roomNumber._id}>
+									<label>{roomNumber.number}</label>
+									<input
+										type="checkbox"
+										value={roomNumber._id}
+										onChange={handleSelect}
+										disabled={!isAvailable(roomNumber)}
+									/>
+								</div>
+							))}
+						</div>
 					</div>
 				))}
 				<div className="rButton" onClick={handleClick}>
